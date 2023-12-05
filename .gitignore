@@ -18,3 +18,4 @@ Cargo.lock
 
 # 🎄 Advent of Code team ask that generated data files are not committed.
 input.txt
+day01/src/answers.txt
