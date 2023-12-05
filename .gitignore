@@ -15,3 +15,6 @@ Cargo.lock
 
 # macOS system files
 .DS_Store
+
+# 🎄 Advent of Code team ask that generated data files are not committed.
+input.txt
