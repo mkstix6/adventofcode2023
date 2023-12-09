@@ -1,0 +1,6 @@
+{
+  "tasks": {
+    "part1": "deno run --watch part1.ts",
+    "part2": "deno run --watch part2.ts"
+  }
+}
