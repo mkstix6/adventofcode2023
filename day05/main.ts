@@ -22,9 +22,40 @@ export function processEntry(rawEntry: string): EntryNums {
   return result;
 }
 
-export function computeAnswerDay5Part1(input: string): number {
-  console.log("TODO: write this function");
-  return 35;
+export function computeAnswerDay5Part1(rawInput: string): number {
+  const seedNumbers = extractSeedNumbers(rawInput);
+  const chonks: number[][][] = rawInput
+    .split("\n\n")
+    .map((chonk) =>
+      chonk
+        .split("\n")
+        .slice(1)
+        .map((line) => line.split(" ").map((item) => parseInt(item)))
+    )
+    .slice(1);
+  const seedLocations = seedNumbers.map((seedNumber) => {
+    // REMEMBER for each seed
+    let destinationPlot = seedNumber;
+    chonks.forEach((chonk) => {
+      const connectCoordinates = chonk.find((entryLine) => {
+        const [_destinationRangeStart, sourceRangeStart, rangeLength] =
+          entryLine;
+        const isConnectionInstructions =
+          sourceRangeStart < destinationPlot &&
+          sourceRangeStart + rangeLength > destinationPlot;
+
+        return isConnectionInstructions;
+      });
+      if (connectCoordinates) {
+        const [destinationRangeStart, sourceRangeStart] = connectCoordinates;
+        destinationPlot =
+          destinationPlot + destinationRangeStart - sourceRangeStart;
+      }
+    });
+    return destinationPlot;
+  });
+  const lowestLocation = seedLocations.sort((a, b) => a - b).at(0) || Infinity;
+  return lowestLocation;
 }
 
 // Learn more at https://deno.land/manual/examples/module_metadata#concepts
@@ -37,14 +68,9 @@ if (import.meta.main) {
    */
 
   const rawInput = await Deno.readTextFile("./input.txt");
-  const seedNumbers = extractSeedNumbers(rawInput);
-  const chonks = rawInput.split("\n\n").map((chonk) => chonk.split("\n"));
-
-  console.log({ seedNumbers, chonks });
-
-  const lowestLocation = seedNumbers.map().sort()[0];
+  const answer = computeAnswerDay5Part1(rawInput);
 
   console.log(
-    `Answer Day5 Part1 – the lowest location-number that corresponds to any of the initial seed-numbers is…: ${"ANSWER"}`
+    `Answer Day5 Part1 – the lowest location-number that corresponds to any of the initial seed-numbers is…: ${answer}`
   );
 }

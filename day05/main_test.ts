@@ -117,10 +117,6 @@ Deno.test(function computeAnswerDay5Part1Test() {
   assertEquals(computeAnswerDay5Part1(testInput), exampleLowestLocationNumber);
 });
 
-Deno.test(function computeAnswerDay5Part1Test() {
-  assertEquals(computeAnswerDay5Part1(testInput), exampleLowestLocationNumber);
-});
-
 Deno.test(function processEntryTest() {
   const entryLines = exampleSeedToSoilMap.split("\n");
   assertEquals(processEntry(entryLines[0]), processedExampleSeedToSoilMap[0]);
