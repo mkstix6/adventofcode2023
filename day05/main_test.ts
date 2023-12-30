@@ -1,9 +1,12 @@
 import { assertEquals } from "https://deno.land/std@0.209.0/assert/mod.ts";
 import {
   extractSeedNumbers,
+  extractSeedRanges,
   processEntry,
   extractChonks,
+  reduceToSeedRanges,
   computeAnswerDay5Part1,
+  computeAnswerDay5Part2,
 } from "./main.ts";
 
 const testInput = `seeds: 79 14 55 13
@@ -76,6 +79,10 @@ const testChonks = [
 ];
 
 const exampleSeeds = [79, 14, 55, 13];
+const exampleSeedRanges = [
+  [79, 14],
+  [55, 13],
+];
 
 const exampleSeedToSoilMap = `50 98 2
 52 50 48`;
@@ -144,13 +151,22 @@ const exampleSeedToLocationTracks = [
 ];
 
 const exampleLowestLocationNumberPart1 = 35;
+const exampleLowestLocationNumberPart2 = 46;
 
 Deno.test(function extractSeedNumbersTest() {
   assertEquals(extractSeedNumbers(testInput), exampleSeeds);
 });
 
+Deno.test(function extractSeedRangesTest() {
+  assertEquals(extractSeedRanges(testInput), exampleSeedRanges);
+});
+
 Deno.test(function extractChonksTest() {
   assertEquals(extractChonks(testInput), testChonks);
+});
+
+Deno.test(function reduceToSeedRangesTest() {
+  assertEquals(exampleSeeds.reduce(reduceToSeedRanges, []), exampleSeedRanges);
 });
 
 Deno.test(function processEntryTest() {
@@ -163,5 +179,13 @@ Deno.test(function computeAnswerDay5Part1Test() {
   assertEquals(
     computeAnswerDay5Part1(testInput),
     exampleLowestLocationNumberPart1
+  );
+});
+
+Deno.test(function computeAnswerDay5Part2Test() {
+  // What is the lowest location number that corresponds to any of the initial seed numbers?
+  assertEquals(
+    computeAnswerDay5Part2(testInput),
+    exampleLowestLocationNumberPart2
   );
 });
