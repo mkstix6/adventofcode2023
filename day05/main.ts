@@ -22,30 +22,36 @@ export function processEntry(rawEntry: string): EntryNums {
   return result;
 }
 
-export function computeAnswerDay5Part1(rawInput: string): number {
-  const seedNumbers = extractSeedNumbers(rawInput);
-  const chonks: number[][][] = rawInput
+type PlotConnection = [number, number, number];
+
+export function extractChonks(rawInput: string): PlotConnection[][] {
+  return <PlotConnection[][]>rawInput
     .split("\n\n")
+    .slice(1)
     .map((chonk) =>
       chonk
         .split("\n")
         .slice(1)
         .map((line) => line.split(" ").map((item) => parseInt(item)))
-    )
-    .slice(1);
-  const seedLocations = seedNumbers.map((seedNumber) => {
-    // REMEMBER for each seed
-    let destinationPlot = seedNumber;
-    chonks.forEach((chonk) => {
-      const connectCoordinates = chonk.find((entryLine) => {
-        const [_destinationRangeStart, sourceRangeStart, rangeLength] =
-          entryLine;
-        const isConnectionInstructions =
-          sourceRangeStart < destinationPlot &&
-          sourceRangeStart + rangeLength > destinationPlot;
+    );
+}
 
-        return isConnectionInstructions;
-      });
+export function computeAnswerDay5Part1(rawInput: string): number {
+  const seedNumbers = extractSeedNumbers(rawInput);
+  const chonks = extractChonks(rawInput);
+  const seedLocations = seedNumbers.map((seedNumber) => {
+    let destinationPlot = seedNumber;
+
+    const isConnection = ([
+      _destinationRangeStart,
+      sourceRangeStart,
+      rangeLength,
+    ]: PlotConnection): boolean =>
+      sourceRangeStart < destinationPlot &&
+      sourceRangeStart + rangeLength > destinationPlot;
+
+    chonks.forEach((chonk) => {
+      const connectCoordinates = chonk.find(isConnection);
       if (connectCoordinates) {
         const [destinationRangeStart, sourceRangeStart] = connectCoordinates;
         destinationPlot =
@@ -54,6 +60,7 @@ export function computeAnswerDay5Part1(rawInput: string): number {
     });
     return destinationPlot;
   });
+
   const lowestLocation = seedLocations.sort((a, b) => a - b).at(0) || Infinity;
   return lowestLocation;
 }
@@ -68,9 +75,9 @@ if (import.meta.main) {
    */
 
   const rawInput = await Deno.readTextFile("./input.txt");
-  const answer = computeAnswerDay5Part1(rawInput);
-
+  const answer1 = computeAnswerDay5Part1(rawInput);
   console.log(
-    `Answer Day5 Part1 – the lowest location-number that corresponds to any of the initial seed-numbers is…: ${answer}`
+    `Answer Day5 Part1 – the lowest location-number that corresponds to any of the initial seed-numbers is…: ${answer1}`
   );
+
 }

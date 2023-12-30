@@ -2,6 +2,7 @@ import { assertEquals } from "https://deno.land/std@0.209.0/assert/mod.ts";
 import {
   extractSeedNumbers,
   processEntry,
+  extractChonks,
   computeAnswerDay5Part1,
 } from "./main.ts";
 
@@ -38,6 +39,41 @@ temperature-to-humidity map:
 humidity-to-location map:
 60 56 37
 56 93 4`;
+
+const testChonks = [
+  [
+    [50, 98, 2],
+    [52, 50, 48],
+  ],
+  [
+    [0, 15, 37],
+    [37, 52, 2],
+    [39, 0, 15],
+  ],
+  [
+    [49, 53, 8],
+    [0, 11, 42],
+    [42, 0, 7],
+    [57, 7, 4],
+  ],
+  [
+    [88, 18, 7],
+    [18, 25, 70],
+  ],
+  [
+    [45, 77, 23],
+    [81, 45, 19],
+    [68, 64, 13],
+  ],
+  [
+    [0, 69, 1],
+    [1, 0, 69],
+  ],
+  [
+    [60, 56, 37],
+    [56, 93, 4],
+  ],
+];
 
 const exampleSeeds = [79, 14, 55, 13];
 
@@ -107,18 +143,25 @@ const exampleSeedToLocationTracks = [
   },
 ];
 
-const exampleLowestLocationNumber = 35;
+const exampleLowestLocationNumberPart1 = 35;
 
 Deno.test(function extractSeedNumbersTest() {
   assertEquals(extractSeedNumbers(testInput), exampleSeeds);
 });
 
-Deno.test(function computeAnswerDay5Part1Test() {
-  assertEquals(computeAnswerDay5Part1(testInput), exampleLowestLocationNumber);
+Deno.test(function extractChonksTest() {
+  assertEquals(extractChonks(testInput), testChonks);
 });
 
 Deno.test(function processEntryTest() {
   const entryLines = exampleSeedToSoilMap.split("\n");
   assertEquals(processEntry(entryLines[0]), processedExampleSeedToSoilMap[0]);
   assertEquals(processEntry(entryLines[1]), processedExampleSeedToSoilMap[1]);
+});
+
+Deno.test(function computeAnswerDay5Part1Test() {
+  assertEquals(
+    computeAnswerDay5Part1(testInput),
+    exampleLowestLocationNumberPart1
+  );
 });
