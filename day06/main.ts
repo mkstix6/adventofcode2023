@@ -23,6 +23,18 @@ export function formatRaceRecords(rawInput: string): RaceRecord[] {
   return races;
 }
 
+export function fixRaceKerning(rawInput: string): RaceRecord {
+  const parts = rawInput.split("\n").map((line) =>
+    parseInt(
+      line
+        .split(/\s+/)
+        .slice(1)
+        .reduce((acc, curr) => acc + curr)
+    )
+  );
+  return { raceDuration: parts[0], distance: parts[1] };
+}
+
 export function raceWinnings({ raceDuration, distance }: RaceRecord): number {
   let winCount = 0;
   for (let i = 0; i < raceDuration; i++) {
@@ -42,17 +54,26 @@ export function computeAnswerDay6Part1(rawInput: string) {
   return winningsMultiplied;
 }
 
+export function computeAnswerDay6Part2(rawInput: string) {
+  const races = formatRaceRecords(rawInput);
+  const raceWinCounts: number[] = races.map((race) => raceWinnings(race));
+  const winningsMultiplied = raceWinCounts.reduce(
+    (a: number, b: number) => a * b
+  );
+  return winningsMultiplied;
+}
+
 // Learn more at https://deno.land/manual/examples/module_metadata#concepts
 if (import.meta.main) {
   const rawInput = await Deno.readTextFile("./input.txt");
   const answer1 = computeAnswerDay6Part1(rawInput);
-  // const answer2 = computeAnswerDay5Part2(rawInput);
+  const answer2 = computeAnswerDay6Part2(rawInput);
 
   console.log(
     `Answer Day5 Part1 – the lowest location-number that corresponds to any of the initial seed-numbers is…: ${answer1}`
   );
 
-  // console.log(
-  //   `Answer Day5 Part2 – the lowest location-number that corresponds to any of the initial seed-numbers is…: ${answer2}`
-  // );
+  console.log(
+    `Answer Day5 Part2 – the lowest location-number that corresponds to any of the initial seed-numbers is…: ${answer2}`
+  );
 }

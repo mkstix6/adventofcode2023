@@ -2,15 +2,18 @@ import { assertEquals } from "https://deno.land/std@0.209.0/assert/mod.ts";
 import {
   calcRaceDistance,
   formatRaceRecords,
+  fixRaceKerning,
   raceWinnings,
   computeAnswerDay6Part1,
+  computeAnswerDay6Part2,
 } from "./main.ts";
 
 const testRaceDuration = 7;
 
-const testRecords = `Time:      7  15   30
+const testRawInput = `Time:      7  15   30
 Distance:  9  40  200`;
 const testPart1Answer = 288;
+const testPart2Answer = 71503;
 
 const testRecordsFormatted = [
   { raceDuration: 7, distance: 9 },
@@ -30,7 +33,14 @@ Deno.test(function calcRaceDistanceTest() {
 });
 
 Deno.test(function formatRaceRecordsTest() {
-  assertEquals(formatRaceRecords(testRecords), testRecordsFormatted);
+  assertEquals(formatRaceRecords(testRawInput), testRecordsFormatted);
+});
+
+Deno.test(function fixRaceKerningTest() {
+  assertEquals(fixRaceKerning(testRawInput), {
+    raceDuration: 71530,
+    distance: 940200,
+  });
 });
 
 Deno.test(function raceWinningsTest() {
@@ -40,5 +50,9 @@ Deno.test(function raceWinningsTest() {
 });
 
 Deno.test(function computeAnswerDay6Part1Test() {
-  assertEquals(computeAnswerDay6Part1(testRecords), testPart1Answer);
+  assertEquals(computeAnswerDay6Part1(testRawInput), testPart1Answer);
+});
+
+Deno.test(function computeAnswerDay6Part2Test() {
+  assertEquals(computeAnswerDay6Part2(testRawInput), testPart2Answer);
 });
